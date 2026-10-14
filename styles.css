@@ -931,9 +931,10 @@ button, a, .clickable, .filter-pill, .menu-item, .order-card {
   margin-top: 10px;
 }
 
-.btn-priority-dispatch {
+.btn-priority-dispatch,
+.btn-card-priority {
   flex: 1;
-  height: 42px;
+  height: 38px;
   border-radius: var(--radius-md);
   background: var(--primary-ink);
   color: #FFFFFF;
@@ -944,11 +945,14 @@ button, a, .clickable, .filter-pill, .menu-item, .order-card {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 2px 8px rgba(28, 27, 26, 0.2);
   transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.btn-priority-dispatch:active {
+.btn-priority-dispatch:active,
+.btn-card-priority:active {
   transform: scale(0.97);
   background: #000000;
 }

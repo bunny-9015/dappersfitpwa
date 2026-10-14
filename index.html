@@ -16,6 +16,7 @@
 
   <!-- Icons -->
   <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 
@@ -528,23 +529,32 @@
         </div>
 
         <h1 style="font-size: 24px; font-weight: 700; color: var(--primary-ink); letter-spacing: -0.5px; margin-bottom: 4px;">Dappersfit</h1>
-        <p style="font-size: 13px; color: var(--meta-gray); margin-bottom: 24px;">Order & Shiprocket Operations Console</p>
+        <p style="font-size: 13px; color: var(--meta-gray); margin-bottom: 24px;">Order &amp; Shiprocket Operations Console</p>
 
-        <!-- Role Selector -->
+        <!-- Role Selector (Administrator vs Fulfillment Staff) -->
         <div style="display: flex; background: var(--surface-low); border-radius: var(--radius-pill); padding: 4px; margin-bottom: 16px;">
-          <button type="button" class="login-role-btn active" data-role="admin" style="flex:1; height: 34px; border-radius: var(--radius-pill); border: none; font-size: 12px; font-weight: 700; background: var(--primary-ink); color: #fff;">Admin</button>
-          <button type="button" class="login-role-btn" data-role="employee" style="flex:1; height: 34px; border-radius: var(--radius-pill); border: none; font-size: 12px; font-weight: 600; background: transparent; color: var(--body-slate);">Staff</button>
+          <button type="button" class="login-role-btn active" data-role="admin" style="flex:1; height: 36px; border-radius: var(--radius-pill); border: none; font-size: 12px; font-weight: 700; background: var(--primary-ink); color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 16px;">verified_user</span>
+            <span>Administrator</span>
+          </button>
+          <button type="button" class="login-role-btn" data-role="employee" style="flex:1; height: 36px; border-radius: var(--radius-pill); border: none; font-size: 12px; font-weight: 600; background: transparent; color: var(--body-slate); display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 16px;">person</span>
+            <span>Fulfillment Staff</span>
+          </button>
         </div>
 
-        <!-- Login Form -->
+        <!-- Login Error Alert Banner -->
+        <div id="login-error-msg" style="display: none; padding: 10px 12px; margin-bottom: 14px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); color: #ef4444; font-size: 12px; text-align: left; line-height: 1.4;"></div>
+
+        <!-- Login Form with Real Credentials -->
         <form id="login-form">
           <div class="form-group" style="text-align: left;">
-            <label class="form-label" for="login-email">Operator Email / ID</label>
-            <input type="email" id="login-email" class="form-control" value="admin@dappersfit.com" required autocomplete="username">
+            <label class="form-label" for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" placeholder="dappersfit@gmail.com" required autocomplete="username">
           </div>
           <div class="form-group" style="text-align: left;">
-            <label class="form-label" for="login-password">Security Password</label>
-            <input type="password" id="login-password" class="form-control" value="admin123" required autocomplete="current-password">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
           </div>
 
           <button type="submit" id="btn-login-submit" class="btn-ink-primary" style="margin-top: 8px;">
@@ -553,19 +563,10 @@
           </button>
         </form>
 
-        <!-- Quick 1-Tap Demo Logins -->
-        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--hairline-border);">
-          <div style="font-size: 11px; font-weight: 600; color: var(--meta-gray); text-transform: uppercase; margin-bottom: 10px;">Quick 1-Tap Sign-In</div>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" id="btn-quick-admin" class="btn-card-secondary" style="flex: 1; height: 38px; font-size: 12px;">Admin Demo</button>
-            <button type="button" id="btn-quick-staff" class="btn-card-secondary" style="flex: 1; height: 38px; font-size: 12px;">Staff Demo</button>
-          </div>
-        </div>
-
         <!-- Live Server Status Indicator -->
         <div style="margin-top: 24px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--radius-pill); background: var(--surface-low); font-size: 11px; color: var(--body-slate);">
           <span class="pulse-dot" style="width: 6px; height: 6px;"></span>
-          <span id="login-server-status">Render Backend: dappersfit.onrender.com</span>
+          <span id="login-server-status">Live Server: dappersfit.onrender.com</span>
         </div>
 
       </div>
@@ -779,6 +780,9 @@
     </div>
 
   </div>
+
+  <!-- Real-Time Firebase Firestore Synchronization Engine -->
+  <script type="module" src="./firebase-service.js"></script>
 
   <!-- Main JavaScript Application Logic -->
   <script src="./app.js"></script>
