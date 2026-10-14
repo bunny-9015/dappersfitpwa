@@ -1,0 +1,203 @@
+{
+  "employees": [
+    {
+      "id": "emp-1784187312734-878141",
+      "name": "Lokesh Kamatham",
+      "role": "Operations Manager",
+      "confirmedCount": 0,
+      "commission": 0,
+      "productAdvanceCount": 0,
+      "standardCount": 0,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1784188185987-272514",
+      "name": "nani",
+      "role": "Staff Operator",
+      "confirmedCount": 14,
+      "commission": 420,
+      "productAdvanceCount": 0,
+      "standardCount": 14,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1784188230489-614248",
+      "name": "chaithra",
+      "role": "Fulfillment Executive",
+      "confirmedCount": 17,
+      "commission": 510,
+      "productAdvanceCount": 0,
+      "standardCount": 17,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1786373819809-790635",
+      "name": "Devi",
+      "role": "Inventory Lead",
+      "confirmedCount": 19,
+      "commission": 570,
+      "productAdvanceCount": 0,
+      "standardCount": 19,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1787151991304-401419",
+      "name": "Bindhu",
+      "role": "Inventory Lead",
+      "confirmedCount": 3,
+      "commission": 110,
+      "productAdvanceCount": 1,
+      "standardCount": 2,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1788261498638-124761",
+      "name": "Milan",
+      "role": "Fulfillment Executive",
+      "confirmedCount": 96,
+      "commission": 3660,
+      "productAdvanceCount": 39,
+      "standardCount": 57,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1788863135354-115065",
+      "name": "dhanu sri",
+      "role": "Inventory Lead",
+      "confirmedCount": 45,
+      "commission": 1490,
+      "productAdvanceCount": 7,
+      "standardCount": 38,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    },
+    {
+      "id": "emp-1790257386928",
+      "name": "ram",
+      "role": "inventory lead",
+      "confirmedCount": 31,
+      "commission": 1070,
+      "productAdvanceCount": 6,
+      "standardCount": 25,
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm"
+    }
+  ],
+  "history": [
+    {
+      "id": "inc-1791308858708-757",
+      "employeeId": "emp-1790257386928",
+      "employeeName": "ram",
+      "paidAmount": 2310,
+      "orderCount": 73,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "8328080788"
+    },
+    {
+      "id": "inc-1791308857179-338",
+      "employeeId": "emp-1788863135354-115065",
+      "employeeName": "dhanu sri",
+      "paidAmount": 3590,
+      "orderCount": 117,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "9441414439"
+    },
+    {
+      "id": "inc-1791308855760-281",
+      "employeeId": "emp-1788261498638-124761",
+      "employeeName": "Milan",
+      "paidAmount": 2520,
+      "orderCount": 80,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "8970609059"
+    },
+    {
+      "id": "inc-1791308854229-410",
+      "employeeId": "emp-1787151991304-401419",
+      "employeeName": "Bindhu",
+      "paidAmount": 860,
+      "orderCount": 28,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "9945347898"
+    },
+    {
+      "id": "inc-1791308852786-520",
+      "employeeId": "emp-1786373819809-790635",
+      "employeeName": "Devi",
+      "paidAmount": 3630,
+      "orderCount": 119,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "7981601499"
+    },
+    {
+      "id": "inc-1791308851142-746",
+      "employeeId": "emp-1784188230489-614248",
+      "employeeName": "chaithra",
+      "paidAmount": 2010,
+      "orderCount": 67,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "8867138097"
+    },
+    {
+      "id": "inc-1791308849535-621",
+      "employeeId": "emp-1784188185987-272514",
+      "employeeName": "nani",
+      "paidAmount": 3330,
+      "orderCount": 111,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "8919444856"
+    },
+    {
+      "id": "inc-1791308846543-697",
+      "employeeId": "emp-1784187312734-878141",
+      "employeeName": "Lokesh Kamatham",
+      "paidAmount": 2490,
+      "orderCount": 83,
+      "payoutDate": "6 Oct 2026, 5:47 pm",
+      "recountFrom": "6 Oct 2026, 5:48 pm",
+      "status": "Paid",
+      "phone": "7702049015"
+    },
+    {
+      "id": "inc-1790784772568-598",
+      "employeeId": "emp-1",
+      "employeeName": "Employee",
+      "paidAmount": 0,
+      "orderCount": 0,
+      "payoutDate": "30 Sept 2026, 9:42 pm",
+      "recountFrom": "30 Sept 2026, 9:43 pm",
+      "status": "Paid",
+      "phone": ""
+    },
+    {
+      "id": "inc-1786967109795-530",
+      "employeeId": "emp-1786373819809-790635",
+      "employeeName": "Devi",
+      "paidAmount": 900,
+      "orderCount": 30,
+      "payoutDate": "17 Aug 2026, 11:45 am",
+      "recountFrom": "17 Aug 2026, 11:46 am",
+      "status": "Paid"
+    }
+  ]
+}

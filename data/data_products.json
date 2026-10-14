@@ -1,0 +1,161 @@
+[
+  {
+    "weight": 0.8,
+    "id": "p-1785686789027-934680",
+    "name": "drn",
+    "category": "Drone Action Cameras",
+    "sku": "drn ",
+    "stock": 500
+  },
+  {
+    "category": "Drone Action Cameras",
+    "sku": "wg",
+    "stock": 500,
+    "weight": 2.5,
+    "name": "wg",
+    "id": "p-1785686817129-150850"
+  },
+  {
+    "category": "Drone Action Cameras",
+    "name": "ac",
+    "id": "p-1785686852004-452123",
+    "weight": 0.8,
+    "stock": 500,
+    "sku": "ac"
+  },
+  {
+    "category": "Drone Action Cameras",
+    "id": "p-1785686881044-925546",
+    "sku": "m22",
+    "name": "gs m22",
+    "weight": 0.8,
+    "stock": 500
+  },
+  {
+    "name": "gs",
+    "id": "p-1785686907804-1721",
+    "weight": 0.8,
+    "stock": 500,
+    "category": "Drone Action Cameras",
+    "sku": "m15"
+  },
+  {
+    "name": "drn cmb",
+    "id": "p-1785768292674-869029",
+    "category": "Drone Action Cameras",
+    "weight": 1,
+    "stock": 500,
+    "sku": "drn cmb"
+  },
+  {
+    "id": "p-1786378571938-665879",
+    "category": "Other / Custom",
+    "stock": 50,
+    "weight": 1,
+    "name": "Erlx",
+    "sku": "Erlx"
+  },
+  {
+    "sku": "og",
+    "stock": 50,
+    "id": "p-1789301892281-263535",
+    "category": "Other / Custom",
+    "weight": 1,
+    "name": "Erlx og"
+  },
+  {
+    "id": "p-1789487976524-51489",
+    "sku": "Fos",
+    "name": "Fossil ",
+    "stock": 50,
+    "category": "Other / Custom",
+    "weight": 1
+  },
+  {
+    "sku": "D",
+    "stock": 50,
+    "category": "Drone Action Cameras",
+    "id": "p-1789489979287-922571",
+    "name": "Desiel ",
+    "weight": 1
+  },
+  {
+    "weight": 1,
+    "id": "p-1789796787448-938204",
+    "sku": "rado",
+    "name": "rado",
+    "category": "Drone Action Cameras",
+    "stock": 50
+  },
+  {
+    "sku": "woop",
+    "category": "Other / Custom",
+    "weight": 0.6,
+    "stock": 50,
+    "id": "p-1790137002482-524926",
+    "name": "whoop"
+  },
+  {
+    "stock": 50,
+    "sku": "rc",
+    "price": 0,
+    "category": "other",
+    "weight": 2,
+    "id": "p-1790345519523",
+    "name": "rc"
+  },
+  {
+    "price": 0,
+    "name": "3 axis",
+    "stock": 50,
+    "id": "p-1790518545785",
+    "category": "Drone",
+    "weight": 1.5,
+    "sku": "drn"
+  },
+  {
+    "price": 0,
+    "id": "p-1790867681480",
+    "sku": "display",
+    "category": "Drone Action Cameras",
+    "stock": 50,
+    "name": "dsply buds",
+    "weight": 0.5
+  },
+  {
+    "name": "projector",
+    "weight": 2,
+    "id": "p-1790947234330",
+    "sku": "pro",
+    "price": 0,
+    "category": "Drone Action Cameras",
+    "stock": 50
+  },
+  {
+    "sku": "om",
+    "weight": 1,
+    "id": "p-1791268720764",
+    "stock": 25,
+    "price": 0,
+    "name": "omega",
+    "category": "watch"
+  },
+  {
+    "price": 1499,
+    "name": "casio",
+    "weight": 0.85,
+    "id": "p-1791449074615",
+    "sku": "cas",
+    "stock": 25,
+    "category": "Drone Action Cameras"
+  },
+  {
+    "id": "p-1791470164396",
+    "category": "Drone Action Cameras",
+    "weight": 0.85,
+    "sku": "gsk",
+    "name": "g shock",
+    "stock": 25,
+    "price": 0
+  }
+]

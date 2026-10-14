@@ -1,0 +1,211 @@
+{
+  "payroll": [
+    {
+      "id": "emp-1784187312734-878141",
+      "name": "Lokesh Kamatham",
+      "role": "Operations Manager",
+      "phone": "7702049015",
+      "email": "kamathamlokesh1234@gmail.com",
+      "salary": 6000,
+      "incentives": 0,
+      "deductions": 0,
+      "totalPayout": 6000,
+      "status": "Paid",
+      "month": "July 2026",
+      "disbursedDate": "14/10/2026",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Paid for July 2026",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 0,
+        "commission": 0,
+        "productAdvanceCount": 0
+      }
+    },
+    {
+      "id": "emp-1784188185987-272514",
+      "name": "nani",
+      "role": "Staff Operator",
+      "phone": "8919444856",
+      "email": "srinuseeker@gmail.com",
+      "salary": 6000,
+      "incentives": 420,
+      "deductions": 0,
+      "totalPayout": 6420,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 14,
+        "commission": 420,
+        "productAdvanceCount": 0
+      }
+    },
+    {
+      "id": "emp-1784188230489-614248",
+      "name": "chaithra",
+      "role": "Fulfillment Executive",
+      "phone": "8867138097",
+      "email": "chaithra0714@gmail.com",
+      "salary": 5000,
+      "incentives": 510,
+      "deductions": 0,
+      "totalPayout": 5510,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 17,
+        "commission": 510,
+        "productAdvanceCount": 0
+      }
+    },
+    {
+      "id": "emp-1786373819809-790635",
+      "name": "Devi",
+      "role": "Inventory Lead",
+      "phone": "7981601499",
+      "email": "devi@dappersfit.com",
+      "salary": 5000,
+      "incentives": 570,
+      "deductions": 0,
+      "totalPayout": 5570,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 19,
+        "commission": 570,
+        "productAdvanceCount": 0
+      }
+    },
+    {
+      "id": "emp-1787151991304-401419",
+      "name": "Bindhu",
+      "role": "Inventory Lead",
+      "phone": "9945347898",
+      "email": "bindhugowda344@gmail.com",
+      "salary": 5000,
+      "incentives": 110,
+      "deductions": 0,
+      "totalPayout": 5110,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 3,
+        "commission": 110,
+        "productAdvanceCount": 1
+      }
+    },
+    {
+      "id": "emp-1788261498638-124761",
+      "name": "Milan",
+      "role": "Fulfillment Executive",
+      "phone": "8970609059",
+      "email": "milangowda758@gmail.com",
+      "salary": 5000,
+      "incentives": 3660,
+      "deductions": 0,
+      "totalPayout": 8660,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 96,
+        "commission": 3660,
+        "productAdvanceCount": 39
+      }
+    },
+    {
+      "id": "emp-1788863135354-115065",
+      "name": "dhanu sri",
+      "role": "Inventory Lead",
+      "phone": "9441414439",
+      "email": "dhanasatyasrikalaga@gmail.com",
+      "salary": 5000,
+      "incentives": 1490,
+      "deductions": 0,
+      "totalPayout": 6490,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 45,
+        "commission": 1490,
+        "productAdvanceCount": 7
+      }
+    },
+    {
+      "id": "emp-1790257386928",
+      "name": "ram",
+      "role": "inventory lead",
+      "phone": "8328080788",
+      "email": "ramrajsakhunala@gmail.com",
+      "salary": 5000,
+      "incentives": 1070,
+      "deductions": 0,
+      "totalPayout": 6070,
+      "status": "Pending",
+      "month": "July 2026",
+      "disbursedDate": "—",
+      "daysUntilNextDue": 0,
+      "nextDueDateStr": "",
+      "cycleNotice": "Payment Due",
+      "resetTime": 1791308880000,
+      "lastResetDate": "6/10/2026, 5:48:00 pm",
+      "breakdown": {
+        "confirmedCount": 31,
+        "commission": 1070,
+        "productAdvanceCount": 6
+      }
+    }
+  ],
+  "history": [
+    {
+      "id": "pay-1785692026477-787",
+      "employeeId": "emp-1784187312734-878141",
+      "employeeName": "Lokesh Kamatham",
+      "role": "Operations Manager",
+      "month": "July 2026",
+      "salaryAmount": 6000,
+      "incentiveAmount": 1820,
+      "totalPaid": 7820,
+      "payoutDate": "2 Aug 2026, 5:33 pm",
+      "status": "Paid",
+      "notes": "Monthly salary approved for July 2026"
+    }
+  ]
+}
