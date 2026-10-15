@@ -5,7 +5,9 @@
    ========================================================================== */
 
 :root {
-  /* Core Luxury Canvas & Surfaces */
+  color-scheme: light;
+  
+  /* Core Luxury Canvas & Surfaces (Exact Hex-Locked Palette) */
   --canvas: #FAF9F6;
   --surface: #FFFFFF;
   --surface-low: #F4F3F0;
