@@ -1744,7 +1744,17 @@
 
     container.innerHTML = `
       <div id="booking-step-1">
-        <div style="font-size: 13px; font-weight: 700; color: var(--primary-ink); margin-bottom: 8px;">Step 1: Parcel Specs & Destination</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary-ink); margin-bottom: 8px;">Step 1: Pickup Location & Parcel Specs</div>
+        <div class="form-group">
+          <label class="form-label">Shiprocket Pickup Address</label>
+          <select id="wizard-pickup" class="form-control">
+            <option value="Ashok og " data-pin="400001" selected>Ashok og — Sahara Market Mumbai (400001)</option>
+            <option value="dapperss" data-pin="600002">dapperss — Chennai Central Hub (600002)</option>
+            <option value="mahakal" data-pin="400004">mahakal — Rubberwala Mumbai (400004)</option>
+            <option value="gopall" data-pin="400001">gopall — Musafir Khana Mumbai (400001)</option>
+            <option value="pankaj" data-pin="110005">pankaj — Karol Bagh Delhi (110005)</option>
+          </select>
+        </div>
         <div class="form-group">
           <label class="form-label">Delivery Pincode</label>
           <input type="text" id="wizard-pincode" class="form-control font-mono" value="${escapeHtml(destPincode)}">
@@ -1820,7 +1830,7 @@
             delivery_postcode: pcode,
             weight: wt,
             cod: pmode === 'COD',
-            pickup_postcode: '411037'
+            pickup_postcode: document.getElementById('wizard-pickup')?.selectedOptions[0]?.getAttribute('data-pin') || '400001'
           })
         });
         if (sRes.ok) {
@@ -1904,7 +1914,9 @@
             body: JSON.stringify({
               orderId: order.id,
               assignedEmployeeId: state.user?.id || 'admin',
-              courierName: selectedName
+              courierName: selectedName,
+              pickupLocationName: document.getElementById('wizard-pickup')?.value || 'Ashok og ',
+              pickupPostcode: document.getElementById('wizard-pickup')?.selectedOptions[0]?.getAttribute('data-pin') || '400001'
             })
           });
 
