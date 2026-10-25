@@ -316,18 +316,6 @@
         <!-- Operations & Catalog -->
         <div class="menu-group-label">Operations & Catalog</div>
         <div class="menu-card">
-          <button id="menu-courier-booking" class="menu-item">
-            <div class="menu-item-left">
-              <div class="menu-icon-wrap">
-                <span class="material-symbols-outlined">local_shipping</span>
-              </div>
-              <div>
-                <div class="menu-title">Courier Booking & Dispatch</div>
-                <div class="menu-sub">Manual rate comparison & partner selection</div>
-              </div>
-            </div>
-            <span class="material-symbols-outlined menu-chevron">chevron_right</span>
-          </button>
 
           <button id="menu-products" class="menu-item">
             <div class="menu-item-left">
@@ -604,23 +592,26 @@
         </div>
 
         <!-- Manual Review & Edit Fields -->
-        <form id="form-add-order">
+        <form id="form-add-order" novalidate>
           <div class="form-group">
             <label class="form-label" for="new-order-customer-name">Customer Full Name *</label>
-            <input type="text" id="new-order-customer-name" class="form-control" placeholder="e.g. Adari Ramachandra Naidu" required>
+            <input type="text" id="new-order-customer-name" class="form-control" placeholder="e.g. Adari Ramachandra Naidu">
+            <div id="error-customer-name" class="field-error-msg" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="new-order-phone">Phone Number (+91) *</label>
-            <input type="tel" id="new-order-phone" class="form-control font-mono" placeholder="10-digit mobile number" required>
+            <input type="tel" id="new-order-phone" class="form-control font-mono" placeholder="10-digit mobile number">
+            <div id="error-phone" class="field-error-msg" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="new-order-address">Street Address *</label>
-            <input type="text" id="new-order-address" class="form-control" placeholder="House / Flat / Street / Landmark" required>
+            <input type="text" id="new-order-address" class="form-control" placeholder="House / Flat / Street / Landmark">
+            <div id="error-address" class="field-error-msg" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;"></div>
           </div>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
             <div class="form-group">
-              <label class="form-label" for="new-order-city">City *</label>
-              <input type="text" id="new-order-city" class="form-control" placeholder="City" required>
+              <label class="form-label" for="new-order-city">City</label>
+              <input type="text" id="new-order-city" class="form-control" placeholder="City">
             </div>
             <div class="form-group">
               <label class="form-label" for="new-order-state">State</label>
@@ -628,7 +619,8 @@
             </div>
             <div class="form-group">
               <label class="form-label" for="new-order-pincode">Pincode *</label>
-              <input type="text" id="new-order-pincode" class="form-control font-mono" placeholder="6 digits" required>
+              <input type="text" id="new-order-pincode" class="form-control font-mono" placeholder="6 digits">
+              <div id="error-pincode" class="field-error-msg" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;"></div>
             </div>
           </div>
 
@@ -681,19 +673,6 @@
       </div>
     </div>
 
-    <!-- SHEET: MANUAL COURIER BOOKING WIZARD -->
-    <div id="sheet-courier-booking" class="modal-sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-header">
-        <span class="sheet-title">Courier Booking & Dispatch</span>
-        <button class="sheet-close-btn" data-close-sheet="sheet-courier-booking">
-          <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
-        </button>
-      </div>
-      <div class="sheet-body" id="booking-sheet-content">
-        <!-- Dynamically injected wizard -->
-      </div>
-    </div>
 
     <!-- SHEET: AI WHATSAPP INTAKE -->
     <div id="sheet-ai-intake" class="modal-sheet">
