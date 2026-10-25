@@ -1484,9 +1484,14 @@
     haptic('heavy');
     showToast(`Booking Priority Air for ${order.orderNumber}...`, 'info');
 
-    try {
-      const pName = (order.pickupLocation && !order.pickupLocation.toLowerCase().includes('dapper')) ? order.pickupLocation : 'Ashok og ';
-      const pPin = (order.pickupLocation && !order.pickupLocation.toLowerCase().includes('dapper')) ? (order.pickupAddress?.pincode || '400001') : '400001';
+      const items = order.items || [];
+      const hasAc = items.some(i => {
+        const sku = (i.sku || '').toLowerCase().trim();
+        const name = (i.name || '').toLowerCase().trim();
+        return sku === 'ac' || name === 'ac' || /\bac\b/i.test(sku) || /\bac\b/i.test(name);
+      });
+      const pName = hasAc ? 'Ashok og ' : ((order.pickupLocation && !order.pickupLocation.toLowerCase().includes('dapper')) ? order.pickupLocation : 'Ashok og ');
+      const pPin = hasAc ? '400001' : ((order.pickupLocation && !order.pickupLocation.toLowerCase().includes('dapper')) ? (order.pickupAddress?.pincode || '400001') : '400001');
 
       const res = await apiFetch('/api/shiprocket/order/priority-book', {
         method: 'POST',
