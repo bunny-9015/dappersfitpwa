@@ -2218,30 +2218,213 @@
   // --- More Modules Hub (Tab 4) ---
   function setupMoreModules() {
 
-    // 2. Products & Catalog (Real Data from data_products.json)
-    document.getElementById('menu-products')?.addEventListener('click', () => {
+    // 2. Products & Catalog (Real Data from backend with Admin Edit/Delete)
+    function renderProductsCatalogSubmodule() {
+      const isAdmin = !state.user || state.user.role === 'admin';
       const prodList = state.products.length > 0 ? state.products : [
-        { sku: "drn", name: "Drone Action Camera", weight: 0.8, stock: 500, category: "Drone Action Cameras" },
-        { sku: "wg", name: "Wide Gimbal Camera", weight: 2.5, stock: 500, category: "Drone Action Cameras" },
-        { sku: "ac", name: "Action Cam Pro", weight: 0.8, stock: 500, category: "Drone Action Cameras" },
-        { sku: "m22", name: "GS M22 Quad", weight: 0.8, stock: 500, category: "Drone Action Cameras" }
+        { id: "p-drn", sku: "drn", name: "Drone Action Camera", weight: 0.8, stock: 500, category: "Drone Action Cameras", price: 14999 },
+        { id: "p-wg", sku: "wg", name: "Wide Gimbal Camera", weight: 2.5, stock: 500, category: "Drone Action Cameras", price: 18999 },
+        { id: "p-ac", sku: "ac", name: "Action Cam Pro", weight: 0.5, stock: 500, category: "Drone Action Cameras", price: 9999 },
+        { id: "p-m22", sku: "m22", name: "GS M22 Quad", weight: 0.8, stock: 500, category: "Drone Action Cameras", price: 12999 }
       ];
 
-      openSubmoduleSheet('Products & Catalog Registry', `
-        <div style="font-size:12px; color:var(--meta-gray); margin-bottom:12px;">Active SKUs in warehouse registry: ${prodList.length}</div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          ${prodList.map(p => `
-            <div class="kpi-card" style="min-height: auto;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="font-mono" style="font-weight:700; font-size:14px;">${escapeHtml(p.sku?.toUpperCase() || 'SKU')}</span>
-                <span class="kpi-badge green">Stock: ${p.stock || 500}</span>
-              </div>
-              <div style="font-size:13px; font-weight:600; margin-top:4px;">${escapeHtml(p.name || p.sku)}</div>
-              <div style="font-size:11px; color:var(--meta-gray); margin-top:2px;">Category: ${escapeHtml(p.category || 'Apparel / Hardware')} • Weight: ${p.weight || 0.8} kg</div>
-            </div>
-          `).join('')}
+      const html = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div style="font-size:12px; color:var(--meta-gray);">Active SKUs in warehouse registry: ${prodList.length}</div>
+          ${isAdmin ? `
+            <button id="btn-pwa-add-product" class="btn-gold-primary" style="padding:6px 12px; font-size:11px; border-radius:8px; height:auto; width:auto;">
+              <span>+ Add Product</span>
+            </button>
+          ` : ''}
         </div>
-      `);
+        <div id="pwa-products-container" style="display: flex; flex-direction: column; gap: 10px;">
+          ${prodList.map((p, idx) => {
+            const isAc = (p.sku || '').toLowerCase().trim() === 'ac' || (p.name || '').toLowerCase().trim() === 'ac';
+            return `
+              <div class="kpi-card" style="min-height: auto; border: 1px solid var(--hairline-border); padding: 12px; border-radius: 12px; background: var(--canvas);">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                  <div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <span class="font-mono" style="font-weight:700; font-size:14px; color:var(--primary-ink);">${escapeHtml(p.sku?.toUpperCase() || 'SKU')}</span>
+                      ${isAc ? '<span style="font-size:9px; font-weight:700; background:rgba(184,134,47,0.15); color:var(--executive-gold); padding:1px 4px; border-radius:4px; font-family:monospace;">AC</span>' : ''}
+                    </div>
+                    <div style="font-size:13px; font-weight:600; margin-top:2px; color:var(--primary-ink);">${escapeHtml(p.name || p.sku)}</div>
+                  </div>
+                  <span class="kpi-badge green" style="font-size:11px;">Stock: ${p.stock ?? 500}</span>
+                </div>
+                <div style="font-size:11px; color:var(--meta-gray); margin-top:4px;">
+                  Category: ${escapeHtml(p.category || 'Drone Action Cameras')} • Weight: <strong>${p.weight || 0.8} kg</strong>${p.price ? ` • Price: <strong>₹${Number(p.price).toLocaleString()}</strong>` : ''}
+                </div>
+                ${isAdmin ? `
+                  <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px; padding-top:8px; border-top:1px solid var(--hairline-border);">
+                    <button class="btn-card-edit-product" data-product-idx="${idx}" style="background:var(--surface-container); border:1px solid var(--hairline-border); color:var(--executive-gold); font-size:11px; font-weight:700; padding:5px 12px; border-radius:6px; cursor:pointer;">
+                      ✏️ Edit
+                    </button>
+                    <button class="btn-card-delete-product" data-product-idx="${idx}" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#EF4444; font-size:11px; font-weight:700; padding:5px 12px; border-radius:6px; cursor:pointer;">
+                      🗑️ Delete
+                    </button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      openSubmoduleSheet('Products & Catalog Registry', html);
+
+      if (isAdmin) {
+        // Add Product Button
+        document.getElementById('btn-pwa-add-product')?.addEventListener('click', () => {
+          showProductFormModal();
+        });
+
+        // Edit Product Buttons
+        document.querySelectorAll('.btn-card-edit-product').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-product-idx'));
+            const p = prodList[idx];
+            if (p) showProductFormModal(p);
+          });
+        });
+
+        // Delete Product Buttons
+        document.querySelectorAll('.btn-card-delete-product').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.getAttribute('data-product-idx'));
+            const p = prodList[idx];
+            if (!p) return;
+
+            if (confirm(`Are you sure you want to permanently delete "${p.name || p.sku}" from the catalog?`)) {
+              haptic('medium');
+              showToast(`Deleting ${p.name || p.sku}...`, 'info');
+              const targetId = p.id || p.sku;
+              state.products = state.products.filter(item => (item.id !== p.id && item.sku !== p.sku));
+              localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(state.products));
+
+              try {
+                await apiFetch(`/api/products/${encodeURIComponent(targetId)}`, {
+                  method: 'DELETE',
+                  headers: { 'x-user-role': 'admin' }
+                });
+                showToast(`Product "${p.name || p.sku}" deleted successfully.`, 'success');
+              } catch (err) {
+                console.warn('Backend delete error:', err);
+              }
+              renderProductsCatalogSubmodule();
+            }
+          });
+        });
+      }
+    }
+
+    function showProductFormModal(existing) {
+      const isEdit = !!existing;
+      const title = isEdit ? 'Edit Catalog Product' : 'Register New Product';
+      const formHtml = `
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="font-size:12px; color:var(--meta-gray);">${isEdit ? `Editing SKU: ${existing.sku}` : 'Add a new item to the warehouse stock registry'}</div>
+          
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">Product Name *</label>
+            <input type="text" id="pwa-prod-name" value="${escapeHtml(existing?.name || '')}" placeholder="e.g., Drone 4K Action Camera" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; box-sizing:border-box;" />
+          </div>
+
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">SKU Code *</label>
+            <input type="text" id="pwa-prod-sku" value="${escapeHtml(existing?.sku || '')}" placeholder="e.g., ac, DRN-4K" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; font-family:monospace; box-sizing:border-box;" />
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">Category</label>
+              <input type="text" id="pwa-prod-cat" value="${escapeHtml(existing?.category || 'Drone Action Cameras')}" placeholder="Category" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; box-sizing:border-box;" />
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">Price (₹)</label>
+              <input type="number" id="pwa-prod-price" value="${existing?.price || 0}" placeholder="0" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; box-sizing:border-box;" />
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">Weight (kg) *</label>
+              <input type="number" step="0.01" id="pwa-prod-weight" value="${existing?.weight || 0.5}" placeholder="0.5" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; box-sizing:border-box;" />
+            </div>
+            <div>
+              <label style="font-size:11px; font-weight:700; color:var(--primary-ink); display:block; margin-bottom:4px;">Warehouse Stock</label>
+              <input type="number" id="pwa-prod-stock" value="${existing?.stock || 50}" placeholder="50" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--hairline-border); font-size:13px; box-sizing:border-box;" />
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+            <button id="btn-cancel-prod-form" class="btn-card-outline" style="padding:8px 14px; font-size:12px; font-weight:700;">Cancel</button>
+            <button id="btn-save-prod-form" class="btn-gold-primary" style="padding:8px 16px; font-size:12px; font-weight:700; border-radius:8px;">
+              <span>${isEdit ? 'Save Changes' : 'Register Product'}</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      openSubmoduleSheet(title, formHtml);
+
+      document.getElementById('btn-cancel-prod-form')?.addEventListener('click', () => {
+        renderProductsCatalogSubmodule();
+      });
+
+      document.getElementById('btn-save-prod-form')?.addEventListener('click', async () => {
+        const name = (document.getElementById('pwa-prod-name')?.value || '').trim();
+        const sku = (document.getElementById('pwa-prod-sku')?.value || '').trim();
+        const category = (document.getElementById('pwa-prod-cat')?.value || 'Drone Action Cameras').trim();
+        const price = Number(document.getElementById('pwa-prod-price')?.value) || 0;
+        const weight = Number(document.getElementById('pwa-prod-weight')?.value) || 0.5;
+        const stock = Number(document.getElementById('pwa-prod-stock')?.value) || 50;
+
+        if (!name || !sku) {
+          alert('Product name and SKU code are required.');
+          return;
+        }
+
+        haptic('medium');
+        showToast(isEdit ? 'Updating product...' : 'Adding product...', 'info');
+
+        const productPayload = {
+          id: existing?.id || `p-${Date.now()}-${Math.floor(Math.random() * 100000)}`,
+          name,
+          sku,
+          category,
+          price,
+          weight,
+          stock
+        };
+
+        if (isEdit) {
+          state.products = state.products.map(p => (p.id === existing.id || p.sku === existing.sku) ? productPayload : p);
+        } else {
+          state.products = [productPayload, ...state.products];
+        }
+        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(state.products));
+
+        try {
+          await apiFetch('/api/products', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-user-role': 'admin'
+            },
+            body: JSON.stringify(productPayload)
+          });
+          showToast(`Product "${name}" saved successfully.`, 'success');
+        } catch (err) {
+          console.warn('Backend save error:', err);
+        }
+
+        renderProductsCatalogSubmodule();
+      });
+    }
+
+    document.getElementById('menu-products')?.addEventListener('click', () => {
+      renderProductsCatalogSubmodule();
     });
 
     // 3. Customers Database (Real Data from data_customers.json)
