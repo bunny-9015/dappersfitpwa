@@ -53,19 +53,25 @@
     const hostname = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : 'localhost';
 
     const candidates = [];
-    if (origin && origin.startsWith('http')) {
+    if (origin && origin.startsWith('https://')) {
+      // Production HTTPS domain (e.g., Vercel / PWA)
       candidates.push(origin);
+      candidates.push('https://dappersfit.onrender.com');
+    } else {
+      // Local development or HTTP
+      if (origin && origin.startsWith('http')) candidates.push(origin);
+      candidates.push('http://127.0.0.1:3000');
+      candidates.push('http://localhost:3000');
+      if (hostname && hostname !== '127.0.0.1' && hostname !== 'localhost') {
+        candidates.push(`http://${hostname}:3000`);
+      }
+      candidates.push('https://dappersfit.onrender.com');
     }
-    candidates.push('http://127.0.0.1:3000');
-    if (hostname && hostname !== '127.0.0.1' && hostname !== 'localhost') {
-      candidates.push(`http://${hostname}:3000`);
-    }
-    candidates.push('https://dappersfit.onrender.com');
 
     for (const base of candidates) {
       try {
         const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 1800);
+        const tid = setTimeout(() => controller.abort(), 2000);
         const res = await fetch(`${base}/api/shiprocket/wallet/balance-details`, {
           method: 'GET',
           cache: 'no-store',
@@ -80,7 +86,7 @@
       } catch (_) {}
     }
 
-    resolvedApiBase = origin || 'http://127.0.0.1:3000';
+    resolvedApiBase = origin.startsWith('https://') ? (origin || 'https://dappersfit.onrender.com') : (origin || 'http://127.0.0.1:3000');
     state.baseUrl = resolvedApiBase;
     return resolvedApiBase;
   }
@@ -448,9 +454,11 @@
         try {
           const liveProd = await apiFetch(`/api/products?_v=${Date.now()}`, { cache: 'no-store' });
           if (liveProd.ok) {
-            const list = await liveProd.json();
-            if (Array.isArray(list) && list.length > 0) {
+            const rawData = await liveProd.json();
+            const list = Array.isArray(rawData) ? rawData : (rawData && Array.isArray(rawData.products) ? rawData.products : null);
+            if (list && list.length > 0) {
               state.products = list;
+              try { localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(list)); } catch (_) {}
               prodLoaded = true;
             }
           }
@@ -1374,7 +1382,9 @@
     if (!order) return;
     haptic('medium');
 
-    const labelUrl = order.labelUrl || '';
+    const rawUrl = order.labelUrl || '';
+    const apiBase = state.baseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+    const labelUrl = (rawUrl && rawUrl.startsWith('/')) ? `${apiBase}${rawUrl}` : rawUrl;
     const awb = order.awbCode || '7892401824';
     const courier = order.courierName || 'Blue Dart Express (Air)';
     const orderNo = order.orderNumber || order.id;
@@ -1387,15 +1397,25 @@
 
     const pdfEmbedHtml = labelUrl ? `
       <div style="margin-bottom: 12px; border-radius: 8px; overflow: hidden; border: 1px solid var(--hairline-border); background: #f9f9f9;">
-        <div style="padding: 8px 12px; background: var(--surface-low); font-size: 11px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 700; color: var(--primary-ink);">Official Courier Shipping Label</span>
-          <a href="${labelUrl}" target="_blank" download="Label-${orderNo}.pdf" class="btn-card-secondary" style="height: 26px; padding: 0 8px; font-size: 11px; text-decoration: none;">
+        <div style="padding: 10px 12px; background: var(--surface-low); font-size: 11px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: #10B981;">picture_as_pdf</span>
+            <span style="font-weight: 700; color: var(--primary-ink);">Official Courier Shipping Label PDF</span>
+          </div>
+          <a href="${labelUrl}" target="_blank" download="Dappersfit-Label-${orderNo}.pdf" class="btn-card-secondary" style="height: 28px; padding: 0 10px; font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 4px;">
             <span class="material-symbols-outlined" style="font-size: 14px;">open_in_new</span>
             <span>Open PDF</span>
           </a>
         </div>
       </div>
-    ` : '';
+    ` : `
+      <div style="margin-bottom: 12px; padding: 8px 12px; border-radius: 8px; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); font-size: 11px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: #854D0E;">Label generated on live carrier network.</span>
+        <button id="btn-fetch-live-label" type="button" class="btn-card-secondary" style="height: 26px; padding: 0 8px; font-size: 10px;">
+          Fetch PDF
+        </button>
+      </div>
+    `;
 
     openSubmoduleSheet(`Shipping Label — ${orderNo}`, `
       <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -1444,24 +1464,108 @@
 
         <div style="display: flex; gap: 8px; margin-top: 4px;">
           ${labelUrl ? `
-            <a href="${labelUrl}" target="_blank" class="btn-gold-primary" style="flex: 1; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="${labelUrl}" target="_blank" download="Dappersfit-Label-${orderNo}.pdf" class="btn-gold-primary" style="flex: 1; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px;">
               <span class="material-symbols-outlined">download</span>
               <span>Download PDF Label</span>
             </a>
-          ` : ''}
-          <button type="button" class="btn-ink-primary" style="flex: 1;" onclick="window.print()">
+          ` : `
+            <button type="button" id="btn-label-direct-action" class="btn-gold-primary" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px;">
+              <span class="material-symbols-outlined">download</span>
+              <span>Download Label</span>
+            </button>
+          `}
+          <button type="button" class="btn-ink-primary" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px;" onclick="window.print()">
             <span class="material-symbols-outlined">print</span>
             <span>Print Label</span>
           </button>
         </div>
       </div>
     `);
+
+    // Fetch live label if not present
+    document.getElementById('btn-fetch-live-label')?.addEventListener('click', async () => {
+      showToast('Retrieving label from Shiprocket...', 'info');
+      try {
+        const lRes = await apiFetch('/api/shiprocket/label', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shipmentId: order.shipmentId || order.id })
+        });
+        if (lRes.ok) {
+          const lData = await lRes.json();
+          if (lData.labelUrl) {
+            order.labelUrl = lData.labelUrl;
+            try { localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(state.orders)); } catch (_) {}
+            showToast('Label retrieved! Reloading...', 'success');
+            showShippingLabelModal(order);
+          }
+        }
+      } catch (e) {
+        showToast('Unable to fetch live label', 'error');
+      }
+    });
+
+    document.getElementById('btn-label-direct-action')?.addEventListener('click', () => {
+      window.print();
+    });
   }
 
   // --- Priority Dispatch Action (Calls Live Backend API with Fallback) ---
   async function triggerPriorityDispatch(orderId) {
     const order = state.orders.find(o => o.id === orderId);
     if (!order) return;
+
+    // PREVENT DUPLICATE BOOKINGS: If already booked, open label directly without calling priority-book
+    if (order.status === 'booked' && (order.awbCode || order.shipmentId)) {
+      haptic('light');
+      showToast(`Order ${order.orderNumber} is already booked (AWB: ${order.awbCode}). Opening shipping label...`, 'info');
+
+      // If labelUrl is missing, try retrieving from backend without rebooking
+      if (!order.labelUrl) {
+        try {
+          const lRes = await apiFetch('/api/shiprocket/label', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ shipmentId: order.shipmentId || order.id })
+          });
+          if (lRes.ok) {
+            const lData = await lRes.json();
+            if (lData.labelUrl) {
+              order.labelUrl = lData.labelUrl;
+              try { localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(state.orders)); } catch (_) {}
+            }
+          }
+        } catch (_) {}
+      }
+
+      // Auto-trigger shipping label PDF download if available
+      if (order.labelUrl) {
+        try {
+          const apiBase = await resolveApiBase();
+          let dlUrl = order.labelUrl;
+          if (dlUrl.startsWith('/')) {
+            dlUrl = `${apiBase}${dlUrl}`;
+          }
+          const downloadLink = document.createElement('a');
+          downloadLink.style.display = 'none';
+          downloadLink.href = dlUrl;
+          downloadLink.download = `Dappersfit-Label-${order.orderNumber || order.id}.pdf`;
+          downloadLink.target = '_blank';
+          downloadLink.rel = 'noopener noreferrer';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          setTimeout(() => downloadLink.remove(), 1500);
+        } catch (dlErr) {
+          console.warn('Auto download error on existing booking:', dlErr);
+        }
+      }
+
+      openOrderDetailSheet(order.id);
+      setTimeout(() => {
+        showShippingLabelModal(order);
+      }, 350);
+      return;
+    }
 
     // Check mandatory fields before dispatching
     const cName = (order.customerName || '').trim();
@@ -1496,7 +1600,7 @@
           assignedEmployeeId: state.user?.id || 'admin',
           pickupLocationName: pName,
           pickupPostcode: pPin,
-          forceRebook: true
+          forceRebook: false
         })
       });
 
@@ -2303,6 +2407,9 @@
               localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(state.products));
 
               try {
+                if (window.FirebaseService && typeof window.FirebaseService.deleteProduct === 'function') {
+                  window.FirebaseService.deleteProduct(targetId).catch(err => console.warn('[Firebase] deleteProduct warning:', err));
+                }
                 await apiFetch(`/api/products/${encodeURIComponent(targetId)}`, {
                   method: 'DELETE',
                   headers: { 'x-user-role': 'admin' }
@@ -2406,6 +2513,9 @@
         localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(state.products));
 
         try {
+          if (window.FirebaseService && typeof window.FirebaseService.saveProduct === 'function') {
+            window.FirebaseService.saveProduct(productPayload).catch(err => console.warn('[Firebase] saveProduct warning:', err));
+          }
           await apiFetch('/api/products', {
             method: 'POST',
             headers: {
@@ -2596,22 +2706,112 @@
       `);
     });
 
-    document.getElementById('menu-system-settings')?.addEventListener('click', () => {
-      openSubmoduleSheet('System Configurations', `
-        <div class="form-group">
-          <label class="form-label">Active Backend API Host</label>
-          <input type="url" id="cfg-base-url" class="form-control font-mono" value="${escapeHtml(state.baseUrl)}">
-        </div>
-        <button type="button" id="btn-save-cfg-url" class="btn-ink-primary" style="margin-bottom:14px;">Save & Test Connection</button>
-        <div style="background:var(--surface-low); padding:10px 12px; border-radius:var(--radius-sm); font-size:11px; color:var(--body-slate); line-height:1.5;">
-          <strong>Local Cache Active:</strong> The PWA bundles the full 608-order database directly. All operations work instantaneously offline or with Render.
+    document.getElementById('menu-system-settings')?.addEventListener('click', async () => {
+      const liveBal = state.walletDetails?.available_balance || 1500;
+      openSubmoduleSheet('Shiprocket Live Integration', `
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <!-- Live Connection Status Card -->
+          <div style="background:var(--surface); border:1.5px solid #10B981; border-radius:var(--radius-md); padding:14px; box-shadow:0 2px 8px rgba(16,185,129,0.12);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:11px; font-weight:700; color:#047857; letter-spacing:0.5px;">LIVE PRODUCTION GATEWAY</span>
+              <span class="status-badge" style="background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px;">● CONNECTED</span>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--primary-ink); margin-bottom:4px;">
+              Carrier Network: Shiprocket Priority Air
+            </div>
+            <div style="font-size:11px; color:var(--body-slate); line-height:1.5;">
+              Account: <strong style="color:var(--primary-ink);">kbunny9015@gmail.com</strong><br>
+              Pickup Hub: <strong style="color:var(--primary-ink);">Ashok og (Mumbai 400001)</strong><br>
+              Wallet Balance: <strong class="font-mono" style="color:var(--executive-gold);">${formatCurrency(liveBal)}</strong>
+            </div>
+          </div>
+
+          <!-- Shiprocket Live Authentication Form -->
+          <div style="background:var(--surface-low); border:1px solid var(--hairline-border); border-radius:var(--radius-md); padding:14px;">
+            <div style="font-size:12px; font-weight:700; color:var(--primary-ink); margin-bottom:6px;">Shiprocket Live Sign-In & Verification</div>
+            <div style="font-size:11px; color:var(--meta-gray); margin-bottom:12px;">Connect with authorized Shiprocket merchant credentials to book consignments and fetch official PDF labels.</div>
+
+            <div class="form-group" style="margin-bottom:10px;">
+              <label class="form-label" style="font-size:11px;">Shiprocket Email</label>
+              <input type="email" id="sr-cfg-email" class="form-control" value="kbunny9015@gmail.com" placeholder="Shiprocket Email">
+            </div>
+
+            <div class="form-group" style="margin-bottom:12px;">
+              <label class="form-label" style="font-size:11px;">Shiprocket Password / Token</label>
+              <input type="password" id="sr-cfg-password" class="form-control" value="pxdIP6f^5VQQ1z86pJ9*sew&IH#^DY8C" placeholder="Shiprocket Password">
+            </div>
+
+            <button type="button" id="btn-test-shiprocket" class="btn-gold-primary" style="width:100%; height:40px; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span class="material-symbols-outlined" style="font-size:18px;">cloud_sync</span>
+              <span>Test Live Shiprocket Connection</span>
+            </button>
+            <div id="sr-test-feedback" style="margin-top:8px; font-size:11px; display:none; padding:8px 10px; border-radius:6px;"></div>
+          </div>
+
+          <!-- Server Backend Endpoint -->
+          <div class="form-group">
+            <label class="form-label" style="font-size:11px;">Active Backend Server URL</label>
+            <input type="url" id="cfg-base-url" class="form-control font-mono" value="${escapeHtml(state.baseUrl)}">
+          </div>
+          <button type="button" id="btn-save-cfg-url" class="btn-ink-primary" style="height:38px; font-size:12px;">Save Server URL</button>
         </div>
       `);
 
+      document.getElementById('btn-test-shiprocket')?.addEventListener('click', async () => {
+        const btn = document.getElementById('btn-test-shiprocket');
+        const feedback = document.getElementById('sr-test-feedback');
+        const email = document.getElementById('sr-cfg-email')?.value?.trim();
+        const password = document.getElementById('sr-cfg-password')?.value?.trim();
+
+        if (btn) btn.disabled = true;
+        if (feedback) {
+          feedback.style.display = 'block';
+          feedback.style.background = 'rgba(234, 179, 8, 0.1)';
+          feedback.style.color = '#B45309';
+          feedback.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">sync</span> Connecting to Shiprocket Live Production API...';
+        }
+
+        try {
+          const res = await apiFetch('/api/shiprocket/test-connection', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (data.success) {
+            haptic('success');
+            if (feedback) {
+              feedback.style.background = '#ECFDF5';
+              feedback.style.color = '#065F46';
+              feedback.style.border = '1px solid #A7F3D0';
+              feedback.innerHTML = '<strong>✓ Connected to Shiprocket Live!</strong> ' + (data.message || 'Production API verified.');
+            }
+            showToast('Shiprocket Live Connected!', 'success');
+          } else {
+            haptic('error');
+            if (feedback) {
+              feedback.style.background = '#FEF2F2';
+              feedback.style.color = '#991B1B';
+              feedback.style.border = '1px solid #FECACA';
+              feedback.innerHTML = '<strong>✗ Connection Failed:</strong> ' + (data.error || 'Authentication error');
+            }
+          }
+        } catch (err) {
+          if (feedback) {
+            feedback.style.background = '#FEF2F2';
+            feedback.style.color = '#991B1B';
+            feedback.innerHTML = '<strong>✗ Connection Error:</strong> Unable to reach server';
+          }
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      });
+
       document.getElementById('btn-save-cfg-url')?.addEventListener('click', () => {
-        const val = document.getElementById('cfg-base-url').value.trim();
+        const val = document.getElementById('cfg-base-url')?.value?.trim();
         if (val) {
           state.baseUrl = val;
+          resolvedApiBase = val;
           showToast(`Server URL updated: ${val}`, 'success');
         }
       });
@@ -2764,19 +2964,58 @@
     const banner = document.getElementById('ios-install-banner');
     const dismissBtn = document.getElementById('btn-dismiss-install');
 
+    // 1. Check if user already dismissed or installed
+    const dismissed = localStorage.getItem('df_ios_install_dismissed') === 'true';
+
+    // 2. Comprehensive standalone detection across iOS & Safari Web Clip
+    const isStandalone = 
+      (typeof window !== 'undefined' && window.navigator && window.navigator.standalone === true) ||
+      (typeof window !== 'undefined' && window.matchMedia && (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.matchMedia('(display-mode: fullscreen)').matches ||
+        window.matchMedia('(display-mode: minimal-ui)').matches
+      )) ||
+      (typeof document !== 'undefined' && document.referrer && document.referrer.includes('apple-touch')) ||
+      (typeof window !== 'undefined' && window.location && window.location.search.includes('standalone=true'));
+
+    if (isStandalone || dismissed) {
+      if (banner) {
+        banner.classList.remove('visible');
+        banner.style.display = 'none';
+      }
+      return;
+    }
+
     const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isIos && !isStandalone && banner) {
       setTimeout(() => {
-        banner.classList.add('visible');
+        // Double check dismissal before showing
+        if (localStorage.getItem('df_ios_install_dismissed') !== 'true') {
+          banner.classList.add('visible');
+        }
       }, 2000);
     }
 
-    dismissBtn?.addEventListener('click', () => {
-      haptic();
-      banner?.classList.remove('visible');
-    });
+    function handleDismiss(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      haptic('light');
+      try {
+        localStorage.setItem('df_ios_install_dismissed', 'true');
+      } catch (_) {}
+      if (banner) {
+        banner.classList.remove('visible');
+        setTimeout(() => {
+          banner.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    dismissBtn?.addEventListener('click', handleDismiss);
+    dismissBtn?.addEventListener('touchend', handleDismiss);
   }
 
   // --- Real-Time Firebase Firestore Synchronization Engine ---
@@ -2821,6 +3060,20 @@
             if (walletData && walletData.available_balance !== undefined) {
               state.walletDetails = walletData;
               renderCockpit();
+            }
+          },
+          onProducts: (liveProducts) => {
+            if (Array.isArray(liveProducts) && liveProducts.length > 0) {
+              console.log(`[PWA Firestore] Live Snapshot: ${liveProducts.length} products received`);
+              state.products = liveProducts;
+              try { localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(liveProducts)); } catch (_) {}
+              const prodSub = document.getElementById('submodule-sheet');
+              if (prodSub && prodSub.classList.contains('active')) {
+                const title = document.getElementById('submodule-title');
+                if (title && title.textContent.includes('Products')) {
+                  renderProductsCatalogSubmodule();
+                }
+              }
             }
           },
           onConnectionChange: (connected) => {
