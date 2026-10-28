@@ -2541,7 +2541,8 @@
 
   // --- Order Detail Bottom Sheet ---
   function openOrderDetailSheet(orderId) {
-    const order = state.orders.find(o => o.id === orderId);
+    if (!orderId) return;
+    const order = state.orders.find(o => String(o.id) === String(orderId) || o.orderNumber === orderId || o.id == orderId);
     if (!order) return;
 
     state.selectedOrder = order;

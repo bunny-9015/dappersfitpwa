@@ -812,6 +812,7 @@ button, a, .clickable, .filter-pill, .menu-item, .order-card {
   margin-bottom: 12px;
   box-shadow: var(--shadow-subtle);
   transition: transform 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
 }
 
 .order-card:active {
